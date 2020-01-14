@@ -10,6 +10,8 @@ defmodule Ygg.Dht do
   end
 
   def addself({:ok,%{"response" => %{"self" => myself} } }) do
-    myself |> Map.keys |> List.first |> fn(m) -> Ygg.Cache.add_node(m); end.()
+    node  = Map.keys(myself) |> List.first
+    label = Map.values(myself)
+    Ygg.Cache.add_node(node,label)
   end
 end

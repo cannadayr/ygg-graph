@@ -14,6 +14,10 @@ defmodule Ygg.Cache do
     GenServer.cast(:ygg, {:add_node, node})
   end
 
+  def add_node(node,label) do
+    GenServer.cast(:ygg, {:add_node, node, label})
+  end
+
   # server
   def init(state) do
       {:ok, state}
@@ -25,5 +29,9 @@ defmodule Ygg.Cache do
 
   def handle_cast({:add_node, node},%{"graph" => graph}) do
     {:noreply, %{"graph" => Graph.add_vertex(graph,node) } }
+  end
+
+  def handle_cast({:add_node, node, label},%{"graph" => graph}) do
+    {:noreply, %{"graph" => Graph.add_vertex(graph,node,label) } }
   end
 end
