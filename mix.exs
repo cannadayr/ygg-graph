@@ -24,7 +24,8 @@ defmodule YggCrawl.MixProject do
     [
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
-      {:jason, git: "https://github.com/michalmuskala/jason.git", tag: "v1.1.2"}
+      {:jason, git: "https://github.com/michalmuskala/jason.git", tag: "v1.1.2"},
+      {:libgraph, git: "https://github.com/bitwalker/libgraph.git", tag: "0.14.0"}
     ]
   end
 end

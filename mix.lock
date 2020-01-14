@@ -1,3 +1,4 @@
 %{
   "jason": {:git, "https://github.com/michalmuskala/jason.git", "f966635be17fc43a3c9c8299f7a61b411f3e2334", [tag: "v1.1.2"]},
+  "libgraph": {:git, "https://github.com/bitwalker/libgraph.git", "13b1ed40a0ce3e919dcc87fd1344d583391ab9f8", [tag: "0.14.0"]},
 }

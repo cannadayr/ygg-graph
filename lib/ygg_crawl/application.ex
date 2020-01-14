@@ -6,7 +6,7 @@ defmodule YggCrawl.Application do
   use Application
 
   def start(_type, _args) do
-    state = []
+    state = %{ "graph" => Graph.new() }
     children = [
       # Starts a worker by calling: YggCrawl.Worker.start_link(arg)
       # {YggCrawl.Worker, arg}
