@@ -6,9 +6,11 @@ defmodule YggCrawl.Application do
   use Application
 
   def start(_type, _args) do
+    state = []
     children = [
       # Starts a worker by calling: YggCrawl.Worker.start_link(arg)
       # {YggCrawl.Worker, arg}
+      {YggCrawl.Cache, state}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

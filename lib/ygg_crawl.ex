@@ -1,9 +1,9 @@
-defmodule YggCrawl do
+defmodule YggCrawl.Cache do
   use GenServer
 
   # client
-  def start_link do
-    GenServer.start_link(__MODULE__, [], name: :ygg_crawl)
+  def start_link(state) do
+    GenServer.start_link(__MODULE__, state, name: :ygg_crawl)
   end
 
   def noop do
