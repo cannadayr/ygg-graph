@@ -1,17 +1,17 @@
-defmodule YggCrawl.Cache do
+defmodule Ygg.Cache do
   use GenServer
 
   # client
   def start_link(state) do
-    GenServer.start_link(__MODULE__, state, name: :ygg_crawl)
+    GenServer.start_link(__MODULE__, state, name: :ygg)
   end
 
   def noop do
-    GenServer.call(:ygg_crawl, :noop)
+    GenServer.call(:ygg, :noop)
   end
 
   def add_node(node) do
-    GenServer.cast(:ygg_crawl, {:add_node, node})
+    GenServer.cast(:ygg, {:add_node, node})
   end
 
   # server

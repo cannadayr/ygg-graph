@@ -16,5 +16,5 @@ import Config
 #       format: "$date $time [$level] $metadata$message\n",
 #       metadata: [:user_id]
 #
-config :ygg_crawl, socket: "/var/run/yggdrasil.sock"
+config :ygg, socket: "/var/run/yggdrasil.sock"
 

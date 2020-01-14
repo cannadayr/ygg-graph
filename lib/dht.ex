@@ -1,5 +1,5 @@
-defmodule YggCrawl.Dht do
-  @path Application.fetch_env!(:ygg_crawl, :socket)
+defmodule Ygg.Dht do
+  @path Application.fetch_env!(:ygg, :socket)
   @opt [:binary, recbuf: 8192, active: false, reuseaddr: true]
 
   def getself do
@@ -9,4 +9,7 @@ defmodule YggCrawl.Dht do
     resp |> Jason.decode
   end
 
+  def addself({:ok,%{"response" => %{"self" => myself} } }) do
+    myself |> Map.keys |> List.first |> fn(m) -> Ygg.Cache.add_node(m); end.()
+  end
 end
