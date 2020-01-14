@@ -1,6 +1,14 @@
 # Ygg
 
-**TODO: Add description**
+Yggdrasil networked graph cache
+
+git clone github.com/cannadayr/ygg-graph.git
+cd ygg-graph
+iex -S mix
+iex(1)> Ygg.Dht.getself |> Ygg.Dht.addself
+iex(1)> Ygg.Cache.noop
+
+**TODO: Add (more) description**
 
 ## Installation
 
