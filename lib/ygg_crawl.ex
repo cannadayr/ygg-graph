@@ -1,18 +1,21 @@
 defmodule YggCrawl do
-  @moduledoc """
-  Documentation for YggCrawl.
-  """
+  use GenServer
 
-  @doc """
-  Hello world.
+  # client
+  def start_link do
+    GenServer.start_link(__MODULE__, [], name: :ygg_crawl)
+  end
 
-  ## Examples
+  def noop do
+    GenServer.call(:ygg_crawl, :noop)
+  end
 
-      iex> YggCrawl.hello()
-      :world
+  # server
+  def init(init_arg) do
+      {:ok, init_arg}
+  end
 
-  """
-  def hello do
-    :world
+  def handle_call(:noop, _from, state) do
+    {:reply, state, state}
   end
 end
