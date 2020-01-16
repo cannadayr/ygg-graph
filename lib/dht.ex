@@ -73,7 +73,8 @@ defmodule Ygg.Dht do
     end
 
     args
-    |> Enum.map(ping)
+    |> Enum.map(&(Task.async(fn -> ping.(&1) end)))
+    |> Enum.map(&Task.await/1)
     |> Enum.map(nodes)
     |> Enum.map(add_set)
   end
@@ -111,7 +112,8 @@ defmodule Ygg.Dht do
       Enum.map(x,add)
     end
     nnaddrs
-    |> Enum.map(ping)
+    |> Enum.map(&(Task.async(fn -> ping.(&1) end)))
+    |> Enum.map(&(Task.await(&1,30000)))
     |> Enum.filter(&match?({:ok, %{"status"=>"success"}}, &1))
     |> Enum.map(nodes)
     |> Enum.map(add_set)
