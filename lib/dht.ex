@@ -74,7 +74,7 @@ defmodule Ygg.Dht do
 
     args
     |> Enum.map(&(Task.async(fn -> ping.(&1) end)))
-    |> Enum.map(&Task.await/1)
+    |> Enum.map(&(Task.await(&1,30000)))
     |> Enum.map(nodes)
     |> Enum.map(add_set)
   end
@@ -100,6 +100,13 @@ defmodule Ygg.Dht do
       {b,c} = x
       Ygg.Dht.dhtping(b,c)
     end
+    nnaddrs
+    |> Enum.map(&(Task.async(fn -> ping.(&1) end)))
+    |> Enum.map(&(Task.await(&1,30000)))
+    |> Enum.filter(&match?({:ok, %{"status"=>"success"}}, &1))
+  end
+
+  def addcrawl(resp) do
     nodes = fn(x) ->
       {:ok,%{"response"=>%{"nodes"=>n}}} = x
       n
@@ -107,16 +114,14 @@ defmodule Ygg.Dht do
     add_set = fn(x) ->
       add = fn(x) ->
         {a,b} = x
+        Ygg.Cache.rm_label(a) # this increases the memory pressure significantly!
         Ygg.Cache.add_node(a,b)
       end
       Enum.map(x,add)
     end
-    nnaddrs
-    |> Enum.map(&(Task.async(fn -> ping.(&1) end)))
-    |> Enum.map(&(Task.await(&1,30000)))
-    |> Enum.filter(&match?({:ok, %{"status"=>"success"}}, &1))
+    resp
     |> Enum.map(nodes)
     |> Enum.map(add_set)
-  end
 
+  end
 end

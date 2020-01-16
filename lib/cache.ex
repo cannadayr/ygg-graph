@@ -10,6 +10,10 @@ defmodule Ygg.Cache do
     GenServer.call(:ygg, :noop)
   end
 
+  def rm_label(node) do
+    GenServer.call(:ygg, {:rm_label, node})
+  end
+
   def add_node(node) do
     GenServer.cast(:ygg, {:add_node, node})
   end
@@ -30,6 +34,10 @@ defmodule Ygg.Cache do
   # IO.inspect g, structs: false
   def handle_call(:noop, _from, state) do
     {:reply, state, state}
+  end
+
+  def handle_call({:rm_label, node}, _from, %{"graph" => graph}) do
+    {:reply, %{"graph" => Graph.remove_vertex_labels(graph,node)}, %{"graph" => graph} }
   end
 
   def handle_cast({:add_node, node},%{"graph" => graph}) do
