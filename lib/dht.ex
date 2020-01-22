@@ -88,8 +88,12 @@ defmodule Ygg.Dht do
           {:next,acc}
         [%{"last_seen" =>_}] ->
           {:next,acc}
+        [%{"visited" =>_}] ->
+          {:next,acc}
         [%{"box_pub_key" => b, "coords" => c}] ->
           {:next,[{b,c}|acc]}
+        _ ->
+          {:next,acc}
       end
     end
     Graph.Reducers.Bfs.reduce(g,[],gen_args)
@@ -107,17 +111,32 @@ defmodule Ygg.Dht do
   end
 
   def addcrawl(resp) do
+
+    require Logger
     nodes = fn(x) ->
-      {:ok,%{"response"=>%{"nodes"=>n}}} = x
-      n
+      {:ok,%{"request" => %{"box_pub_key"=>bpk},"response"=>%{"nodes"=>n}}} = x
+
+      Logger.info("bpk: #{bpk}")
+      [id] = Ygg.Cache.get_by_pubkey(bpk)
+      [label] = Ygg.Cache.get_label(id)
+      ll = Map.put(label,"visited",true)
+      Ygg.Cache.rm_label(id)
+      Ygg.Cache.add_label(id,ll)
+      # graph = Graph.label_vertex(graph, :v1, [:label1])
+      #Ygg.Cache.add_node(id,ll)
+
+      {id,n}
     end
     add_set = fn(x) ->
-      add = fn(x) ->
-        {a,b} = x
-        Ygg.Cache.rm_label(a) # this increases the memory pressure significantly!
-        Ygg.Cache.add_node(a,b)
+      {f,t} = x
+      mut = fn(y) ->
+        {n,l} = y
+        Ygg.Cache.rm_label(n) # don't use cast! increases memory significantly! #TODO figure out why
+        Ygg.Cache.add_node(n,l)
+        Ygg.Cache.add_edge(f,n)
+        #{{n},{n,l},{f,n}}
       end
-      Enum.map(x,add)
+      Enum.map(t,mut)
     end
     resp
     |> Enum.map(nodes)
